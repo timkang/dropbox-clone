@@ -52,7 +52,7 @@ module.exports = function(grunt) {
     },
 		watch: {
       css: {
-				files: path.join(sassFolder, "**", "*.scss"),
+				files: path.join(cssFolder, "**", "*.css"),
 				tasks: ["sass","cssmin","compress:css"]
 			}
 		}

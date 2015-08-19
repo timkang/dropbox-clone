@@ -1,0 +1,19 @@
+@import "libs/columns";
+
+$numberOfColumns: 3;
+
+body {
+
+	div {
+		@include column-count($numberOfColumns);
+		@include column-gap();
+		@include column-rule(1px);
+		@include column-width(100px);
+	}
+
+	h2 {
+		@include column-span(all);
+		text-align:center;
+	}
+
+}

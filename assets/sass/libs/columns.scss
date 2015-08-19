@@ -1,0 +1,27 @@
+@mixin column-count($columnCount: 3) {
+  -webkit-column-count: $columnCount; /* Chrome, Safari, Opera */
+  -moz-column-count: $columnCount; /* Firefox */
+  column-count: $columnCount;
+}
+
+@mixin column-gap($columnGap: 40px) {
+  -webkit-column-gap: $columnGap; /* Chrome, Safari, Opera */
+  -moz-column-gap: $columnGap; /* Firefox */
+  column-gap: $columnGap;
+}
+
+@mixin column-rule($columnRuleWidth: 0px, $columnRuleStyle: solid, $columnRuleColor: black) {
+  -webkit-column-rule: $columnRuleWidth $columnRuleStyle $columnRuleColor; /* Chrome, Safari, Opera */
+  -moz-column-rule: $columnRuleWidth $columnRuleStyle $columnRuleColor; /* Firefox */
+  column-rule: $columnRuleWidth $columnRuleStyle $columnRuleColor;
+}
+
+@mixin column-span($columnSpan: 1) {
+    -webkit-column-span: $columnSpan; /* Chrome, Safari, Opera */
+    column-span: $columnSpan;
+}
+
+@mixin column-width($columnWidth) {
+    -webkit-column-width: $columnWidth; /* Chrome, Safari, Opera */
+    column-width: $columnWidth;
+}

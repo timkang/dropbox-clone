@@ -1,0 +1,41 @@
+body {
+
+	margin:0;
+	padding:0;
+
+	div.layout {
+
+		display:flex;
+		flex-direction: column;
+
+		div:first-child {
+			background-color:blue;
+			padding:10px;
+		}
+
+		div:last-child {
+			background-color:green;
+			padding:10px;
+		}
+
+		div:not(:first-child):not(:last-child) {
+
+			display:flex;
+			flex-direction: row;
+
+			div:first-child, div:last-child  {
+				flex-grow: 1;
+				background-color:red;
+				padding:10px;
+			}
+
+			div:not(:first-child):not(:last-child) {
+				flex-grow: 3;
+				background-color:orange;
+				padding:10px;
+			}
+
+		}
+	}
+
+}

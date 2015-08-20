@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Intuit Bootcamp</title>
+	</head>
+	<body>
+
+		<script>
+
+			"use strict";
+
+			var myFunc = function(p1, p2, p3) {
+				console.log(this, p1, p2, p3);
+			}
+
+			myFunc.myName = "Hi";
+			console.dir(myFunc);
+
+			myFunc();
+			window.myFunc();
+
+			var o = {
+				id: 1,
+				myFunc: myFunc
+			};
+			o.myFunc();
+			o.myFunc.myName
+
+			/*
+			console.log(myFunc === window.myFunc);
+			console.log(o.myFunc === window.myFunc);
+			console.log(myFunc === o.myFunc);
+			*/
+
+			//console.log(window.myName);
+
+			myFunc.call({ id: 2 }, "a","b","c");
+			myFunc.apply({ id: 3 }, ["a","b","c"]);
+
+			var fn = myFunc.bind({ id: 4 }, 6);
+
+			fn(1, 2,3);
+
+		</script>
+
+	</body>
+</html>

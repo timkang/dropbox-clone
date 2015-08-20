@@ -32,5 +32,5 @@ button {
 }
 
 button:hover {
-	@include animate-me(button-hover, 1s);
+	@include animate-me(button-hover-2, 1s);
 }

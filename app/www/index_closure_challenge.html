@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Intuit Bootcamp</title>
+	</head>
+	<body>
+
+		<script>
+
+			var x=0,y=0,funcs=[];
+
+			for (;x<5;x++) {
+
+				// immediately invoked function expression
+
+				(function() {
+					var tt = x;
+					funcs.push(function() {
+						console.log(tt);
+					});
+				})();
+			}
+
+			for(;y<5;y++) {
+				funcs[y]();
+			}
+
+		</script>
+
+	</body>
+</html>

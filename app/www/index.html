@@ -3,29 +3,64 @@
 <html>
 	<head>
 		<title>Intuit Bootcamp</title>
-		<link href="css/site.min.gz.css" rel="stylesheet">
 	</head>
 	<body>
 
-		<div class="container">
-			<div class="row">
-					<div class="col-4">
-						Header
-					</div>
-			</div>
-			<div class="row">
-					<div class="col-3">
-						Main Content
-					</div>
-					<div class="col-1">
-						Menu
-					</div>
-			</div>
-			<div class="row">
-					<div class="col-4">
-						Footer
-					</div>
-			</div>
-		</div>
+		<script>
+
+			"use strict";
+
+			function Person(firstName, lastName) {
+				this.firstName = firstName;
+				this.lastName = lastName;
+			}
+
+			Person.prototype.getFullName = function() {
+				return this.firstName + " " + this.lastName;
+			}
+
+			function IntuitEmployee(firstName, lastName, empId) {
+
+				if (this == null) {
+					throw Error("The world has ended!");
+				}
+
+				this.empId = empId;
+				IntuitEmployee.prototype._super.call(this, firstName, lastName);
+			}
+
+			IntuitEmployee.prototype = Object.create(Person.prototype);
+			IntuitEmployee.prototype.constructor = IntuitEmployee;
+			IntuitEmployee.prototype._super = Person;
+
+			IntuitEmployee.prototype.getEmpInfo = function() {
+				return this.empId + " " + this.lastName + ", " + this.firstName;
+			};
+
+			var intuitEmp = new IntuitEmployee("Justin", "Hung", "1");
+			console.dir(intuitEmp);
+			console.log(intuitEmp.getEmpInfo());
+			console.log(intuitEmp.getFullName());
+
+
+			/*
+
+
+
+			var p1 = new Person(Person.prototype, "Justin", "Hung");
+			console.log(p1.getFullName());
+			console.dir(p1);
+
+			var p2 = new Person("Tim", "Kang");
+			console.dir(p2);
+
+			console.log(Object.getPrototypeOf(p1) === Person.prototype);
+
+			console.dir(Person)
+
+			*/
+
+		</script>
+
 	</body>
 </html>

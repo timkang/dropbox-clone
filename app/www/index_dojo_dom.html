@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Intuit Bootcamp</title>
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+		<!--<script src="libs/jquery/dist/jquery.js"></script>-->
+		<script src="js/dojo/dojo-config.js"></script>
+		<script src="libs/dojo/dojo.js"></script>
+	</head>
+	<body>
+
+		<div id="myApp">
+
+			<ul id="myItems">
+			</ul>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			require(["dojo/on", "dojo/dom", "dojo/dom-construct", "dojo/dom-style", "dojo/query", "dojo/domReady!"],
+				function(on, dom, domConstruct, domStyle) {
+
+					console.dir(on);
+					console.dir(domStyle);
+
+
+
+					//console.dir(dom.byId("myApp"));
+
+					var myAppDiv = dom.byId("myApp");
+
+					domStyle.set(myAppDiv, "background", "blue");
+					console.log(domStyle.get(myAppDiv, "background-color"));
+
+					domConstruct.create("li", {
+						innerHTML: "black"
+					}, dom.byId("myItems"));
+
+					var myButton = domConstruct.create("button", {
+						id: "myButton",
+						innerHTML: "My Button",
+						class: "click-me"
+					});
+
+					domConstruct.place(myButton, dom.byId("myItems"),"after");
+
+					on(myButton, "click", function() {
+						console.log(arguments);
+						console.log("I was clicked");
+					});
+
+					on(myAppDiv, ".click-me:click", function() {
+						console.log("div clicked: " + this.id);
+					});
+
+					console.dir(myButton);
+
+					
+
+				});
+
+
+		</script>
+
+	</body>
+</html>

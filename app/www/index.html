@@ -23,7 +23,23 @@
 
 				function internalExtend(superEntity, options) {
 
+					var defaults = {};
+
+					if (options && options.defaults) {
+						defaults = options.defaults;
+					}
+
 					function Entity(options) {
+
+						if (!options) {
+							options = {};
+						}
+
+						for (var prop in defaults) {
+							if (!options.hasOwnProperty(prop)) {
+								options[prop] = defaults[prop];
+							}
+						}
 
 						Entity.prototype._super.call(this, options);
 
@@ -72,17 +88,20 @@
 			});
 
 			var IntuitEmployee = Person.extend({
+				defaults: {
+					firstName: "John",
+					lastName: "Doe",
+					age: 32,
+					empId: 234
+				},
 				getEmpInfo: function() {
 					return this.get("empId") + " " + this.get("lastName") + ", " + this.get("firstName");
 				}
 			})
 
 			var e = new IntuitEmployee({
-				firstName: "Bob",
-				lastName: "Smith",
-				empId: 123
+				empId: 456
 			});
-
 
 			console.log(e.getEmpInfo());
 			console.dir(e);

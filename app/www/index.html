@@ -23,10 +23,20 @@
 
 				function internalExtend(superEntity, options) {
 
-					var defaults = {};
+					var defaults = {}, initialize = null;
 
-					if (options && options.defaults) {
-						defaults = options.defaults;
+					if (options) {
+
+						if (options.defaults) {
+							defaults = options.defaults;
+							delete options.defaults;
+						}
+
+						if (options.initialize) {
+							console.log("set initialize");
+							initialize = options.initialize;
+							delete options.initialize;
+						}
 					}
 
 					function Entity(options) {
@@ -42,6 +52,11 @@
 						}
 
 						Entity.prototype._super.call(this, options);
+
+						if (initialize) {
+							console.log("run initialize");
+							initialize.call(this);
+						}
 
 					}
 
@@ -77,11 +92,40 @@
 
 				intuit.Model = Model;
 
+				function Collection(options) {
+					this.models = options || [];
+				}
+
+				Collection.prototype.add = function(model) {
+					this.models.push(model);
+				};
+
+				Collection.prototype.forEach = function(fn) {
+					this.models.forEach(fn);
+				};
+
+				Collection.extend = function(options) {
+					return internalExtend(Collection, options);
+				};
+
+				intuit.Collection = Collection;
+
 				return intuit;
 
 			})();
 
 			var Person = Intuit.Model.extend({
+				initialize: function() {
+					this.set("addresses", []);
+				},
+				addAddress: function(street, city, state, zipCode) {
+					this.get("addresses").push({
+						street: street,
+						city: city,
+						state: state,
+						zipCode: zipCode
+					});
+				},
 				getFullName: function() {
 					return this.get("firstName") + " " + this.get("lastName");
 				}
@@ -92,7 +136,7 @@
 					firstName: "John",
 					lastName: "Doe",
 					age: 32,
-					empId: 234
+					empId: 234,
 				},
 				getEmpInfo: function() {
 					return this.get("empId") + " " + this.get("lastName") + ", " + this.get("firstName");
@@ -100,11 +144,40 @@
 			})
 
 			var e = new IntuitEmployee({
-				empId: 456
+				firstName:"Barack",
+				lastName: "Obama",
+				age: 54,
+				empId: 1
 			});
 
-			console.log(e.getEmpInfo());
-			console.dir(e);
+			e.addAddress("1600 Pennsylvania Ave.", "Washington", "DC", "10000");
+
+			var e2 = new IntuitEmployee({
+				firstName: "Sarah",
+				lastName: "Greene",
+				age: 12,
+				empId: 2
+			});
+			e2.addAddress("123 Oak Lane", "Martha's Vineyard", "MA", "20000");
+
+			console.dir(e2);
+
+			var IntuitEmployees = Intuit.Collection.extend({
+				showMailingList: function() {
+					this.models.forEach(function(emp) {
+						var address = emp.get("addresses")[0];
+						console.log(emp.get("firstName") + " " + emp.get("lastName") + " " +
+							address.street + " " + address.city + " " + address.state + ", " + address.zipCode);
+					})
+				}
+			});
+
+			var iEmps = new IntuitEmployees([e, e2]);
+			iEmps.showMailingList();
+			//iEmps.forEach(function(emp) {
+			//	console.log(emp.getEmpInfo());
+			//})
+
 
 		</script>
 

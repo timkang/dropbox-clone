@@ -78,12 +78,20 @@
 						this.attributes = options || {};
 				}
 
+				inherits(Events, Model);
+
 				Model.prototype.get = function(propName) {
 					return this.attributes[propName];
 				};
 
 				Model.prototype.set = function(propName, propValue) {
+					var eventData = {};
+					eventData[propName] = {
+						oldValue: this.attributes[propName],
+						newValue: propValue
+					};
 					this.attributes[propName] = propValue;
+					this.trigger("change", eventData);
 				};
 
 				Model.extend = function(options) {
@@ -95,6 +103,8 @@
 				function Collection(options) {
 					this.models = options || [];
 				}
+
+				inherits(Events, Collection);
 
 				Collection.prototype.add = function(model) {
 					this.models.push(model);
@@ -109,6 +119,35 @@
 				};
 
 				intuit.Collection = Collection;
+
+				function Events() {
+
+				}
+
+				Events.prototype.trigger = function(eventName, eventData) {
+
+					if (this.events && this.events[eventName]) {
+
+						this.events[eventName].forEach(function (eventHandler) {
+							eventHandler(eventData);
+						});
+					}
+
+				};
+
+				Events.prototype.on = function(eventName, eventHandler) {
+
+					if (!this.events) {
+						this.events = {};
+					}
+
+					if (!this.events[eventName]) {
+						this.events[eventName] = [];
+					}
+
+					this.events[eventName].push(eventHandler);
+
+				};
 
 				return intuit;
 
@@ -125,6 +164,7 @@
 						state: state,
 						zipCode: zipCode
 					});
+					this.trigger("change-address", {});
 				},
 				getFullName: function() {
 					return this.get("firstName") + " " + this.get("lastName");
@@ -146,9 +186,17 @@
 			var e = new IntuitEmployee({
 				firstName:"Barack",
 				lastName: "Obama",
-				age: 54,
+				age: 53,
 				empId: 1
 			});
+
+			e.on("change", function() {
+				console.log("Barack Obama Changed");
+				console.dir(arguments);
+			});
+
+			console.log("set age to 54");
+			e.set("age", 54);
 
 			e.addAddress("1600 Pennsylvania Ave.", "Washington", "DC", "10000");
 

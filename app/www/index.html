@@ -12,49 +12,13 @@
 
 	<body>
 
-		<table>
-			<tr>
-				<td>Name</td>
-				<td>Desc</td>
-				<td>Date</td>
-				<td><button id="myButton">Click Me</button></td>
-			</tr>
-		</table>
+		<div style="float:left;">Tim</div>
+		<div style="float:right;">Justin<br>Some Info</div>
+
+		<div style="float:right;clear:right;">Joel</div>
+		<div style="clear:left;">John</div>
 		<script>
 
-			function myFunc1() {
-				console.log("I was clicked!");
-			}
-
-			function myFunc2() {
-				console.log("I was clicked!!");
-			}
-
-			function myFunc3() {
-				console.log("I was clicked!!!");
-			}
-
-			var myButton = document.getElementById("myButton");
-			//myButton.addEventListener("click", myFunc1);
-			//myButton.addEventListener("click", myFunc2);
-			//myButton.addEventListener("click", myFunc3);
-			//myButton.removeEventListener("click", myFunc);
-
-			//$("#myButton").on("click", myFunc1);
-			//$("#myButton").on("click", myFunc2);
-			//$("#myButton").on("click", myFunc3);
-
-			//$("#myButton").off("click", myFunc1);
-					//console.dir($("#myButton").closest("tr"));
-
-			require(["dojo/dom", "dojo/dom-construct", "dojo/query", "dojo/on", "dojo/domReady!"],
-				function(dom, domConstruct, query, on) {
-
-					on.once(dom.byId("myButton"), "click", function() {
-						console.log("run once!");
-						//buttonEvent.remove();
-					});
-				});
 
 		</script>
 

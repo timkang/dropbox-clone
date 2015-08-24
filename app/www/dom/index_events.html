@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Intuit Bootcamp</title>
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<script src="js/dojo/dojo-config.js"></script>
+		<script src="libs/dojo/dojo.js"></script>
+	</head>
+
+	<body>
+
+		<table>
+			<tr>
+				<td>Name</td>
+				<td>Desc</td>
+				<td>Date</td>
+				<td><button id="myButton">Click Me</button></td>
+			</tr>
+		</table>
+		<script>
+
+			function myFunc1() {
+				console.log("I was clicked!");
+			}
+
+			function myFunc2() {
+				console.log("I was clicked!!");
+			}
+
+			function myFunc3() {
+				console.log("I was clicked!!!");
+			}
+
+			var myButton = document.getElementById("myButton");
+			//myButton.addEventListener("click", myFunc1);
+			//myButton.addEventListener("click", myFunc2);
+			//myButton.addEventListener("click", myFunc3);
+			//myButton.removeEventListener("click", myFunc);
+
+			//$("#myButton").on("click", myFunc1);
+			//$("#myButton").on("click", myFunc2);
+			//$("#myButton").on("click", myFunc3);
+
+			//$("#myButton").off("click", myFunc1);
+					//console.dir($("#myButton").closest("tr"));
+
+			require(["dojo/dom", "dojo/dom-construct", "dojo/query", "dojo/on", "dojo/domReady!"],
+				function(dom, domConstruct, query, on) {
+
+					on.once(dom.byId("myButton"), "click", function() {
+						console.log("run once!");
+						//buttonEvent.remove();
+					});
+				});
+
+		</script>
+
+	</body>
+</html>

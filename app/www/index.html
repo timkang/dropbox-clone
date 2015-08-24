@@ -12,62 +12,49 @@
 
 	<body>
 
-		<div id="placeHolder">
-			<div id="divider"></div>
-		</div>
-		<!--
-		<ul>
-			<li>Item 1</li>
-			<li>Item 2</li>
-			<li>Item 3</li>
-			<li>Item 4</li>
-			<li>Item 5</li>
-			<li>Item 6</li>
-		</ul>
-		-->
-
+		<table>
+			<tr>
+				<td>Name</td>
+				<td>Desc</td>
+				<td>Date</td>
+				<td><button id="myButton">Click Me</button></td>
+			</tr>
+		</table>
 		<script>
 
-			var domElement = document.createElement("div");
-			domElement.innerHTML = "Motel 6 & Hobee's Rocks!";
-
-			//document.getElementById("placeHolder")
-				//.appendChild(domElement);
-				//.insertBefore(domElement, document.getElementById("divider"));
-				//.replaceChild(domElement, document.getElementById("divider"));
-
-			var liNodes = document.querySelectorAll("li");
-			for (var x=0; x<liNodes.length; x++) {
-				liNodes[x].appendChild(domElement);
+			function myFunc1() {
+				console.log("I was clicked!");
 			}
 
+			function myFunc2() {
+				console.log("I was clicked!!");
+			}
 
-			var domElement2 = $("<div>");
-			domElement2.html("Motel 6 & Hobee's Rocks!!!");
-			//$("#placeHolder").append(domElement2);
-			//$("#divider").replaceWith(domElement2);
-			//$("#divider").unwrap().wrap("<section></section>");
-			//$("#divider").after(domElement2);
-			//$("#divider").before(domElement2);
+			function myFunc3() {
+				console.log("I was clicked!!!");
+			}
 
-			//$("li").append(domElement2);
+			var myButton = document.getElementById("myButton");
+			//myButton.addEventListener("click", myFunc1);
+			//myButton.addEventListener("click", myFunc2);
+			//myButton.addEventListener("click", myFunc3);
+			//myButton.removeEventListener("click", myFunc);
 
-			require(["dojo/dom", "dojo/dom-construct", "dojo/query", "dojo/domReady!"],
-				function(dom, domConstruct, query) {
+			//$("#myButton").on("click", myFunc1);
+			//$("#myButton").on("click", myFunc2);
+			//$("#myButton").on("click", myFunc3);
 
-					/*
-					var domElement3 = domConstruct.create("div", {
-						innerHTML: "Motel 6 & Hobee's Rocks!!!!!!"
-					}, dom.byId("placeHolder"));
-					*/
+			//$("#myButton").off("click", myFunc1);
+					//console.dir($("#myButton").closest("tr"));
 
-					var domElement3 = domConstruct.create("div", {
-						innerHTML: "Motel 6 & Hobee's Rocks!!!!!!"
+			require(["dojo/dom", "dojo/dom-construct", "dojo/query", "dojo/on", "dojo/domReady!"],
+				function(dom, domConstruct, query, on) {
+
+					on.once(dom.byId("myButton"), "click", function() {
+						console.log("run once!");
+						//buttonEvent.remove();
 					});
-
-					domConstruct.place(domElement3, dom.byId("placeHolder"), "only");
 				});
-
 
 		</script>
 

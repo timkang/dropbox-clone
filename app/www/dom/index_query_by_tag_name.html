@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Intuit Bootcamp</title>
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<script src="js/dojo/dojo-config.js"></script>
+		<script src="libs/dojo/dojo.js"></script>
+	</head>
+
+	<body>
+
+		<div id="newsFlash">
+			News Flash: If you own stocks, you are not quite broke.
+		</div>
+
+		<script>
+
+			var domElement = document.getElementsByTagName("div");
+			console.dir(domElement[0]);
+
+			var divElement = $("div");
+			console.dir(divElement[0]);
+
+			var domElement2 = document.querySelectorAll("div");
+			console.dir(domElement2[0]);
+
+			require(["dojo/dom", "dojo/dom-construct", "dojo/query", "dojo/domReady!"],
+				function(dom, domConstruct, query) {
+
+					var divElement3 = query("#newsFlash");
+					console.dir(divElement3[0]);
+
+				});
+
+
+		</script>
+
+	</body>
+</html>

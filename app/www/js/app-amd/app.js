@@ -1,11 +1,25 @@
-define(["app-amd/constants", "app-amd/init", "app-amd/i18n!app-amd/nls/label"],
-	function(constants, init, label) {
+define(['jquery'], function() {
 
-		console.log(constants.url);
-		console.log(label.greeting);
+	var xhr = new XMLHttpRequest();
 
-		init.doSomething();
+	xhr.onreadystatechange = function() {
+		console.log(xhr.readyState, xhr.status);
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			console.log(xhr.responseText);
+		}
+	};
 
-		console.log("app loaded...");
+	xhr.open("GET", "/api/widgets");
+	xhr.send();
 
+	$.ajax("/api/widgets").success(function(result) {
+		console.dir(result);
 	});
+
+	myAjax(url, successFn);
+
+	//request("/api/widgets").then(function() {
+	//	console.dir(arguments);
+	//});
+
+});

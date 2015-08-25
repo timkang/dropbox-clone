@@ -1,25 +1,50 @@
 define(['jquery'], function() {
 
-	var xhr = new XMLHttpRequest();
+	function createPromise(willResolve, result, timeout) {
 
-	xhr.onreadystatechange = function() {
-		console.log(xhr.readyState, xhr.status);
-		if (xhr.readyState === 4 && xhr.status === 200) {
-			console.log(xhr.responseText);
-		}
-	};
+		var p = new Promise(function(resolve, reject) {
+			setTimeout(function() {
+				console.log("timeout expired");
+				if (willResolve) {
+					resolve(result);
+				} else {
+					reject(result);
+				}
+			}, timeout);
 
-	xhr.open("GET", "/api/widgets");
-	xhr.send();
+		});
 
-	$.ajax("/api/widgets").success(function(result) {
+		return p;
+	}
+
+	var
+		p1 = createPromise(true, "a", 2000),
+		p2 = createPromise(true, "b", 4000),
+		p3 = createPromise(false, "c", 6000),
+		p4 = createPromise(true, "d", 8000);
+
+	p1.then(function() {
+		console.log("promise 1 resolved");
+	});
+	p2.then(function() {
+		console.log("promise 2 resolved");
+	});
+	p3.then(function() {
+		console.log("promise 3 resolved");
+	}, function() {
+		console.log("promise 3 rejected");
+	});
+	p4.then(function() {
+		console.log("promise 4 resolved");
+	});
+
+	Promise.all([p1,p2,p3,p4]).then(function(result) {
+		console.log("all resolved");
+		console.dir(result);
+	}, function(result) {
+		console.log("one rejected");
 		console.dir(result);
 	});
 
-	myAjax(url, successFn);
-
-	//request("/api/widgets").then(function() {
-	//	console.dir(arguments);
-	//});
 
 });

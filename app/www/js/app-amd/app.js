@@ -1,7 +1,11 @@
-define(["app-amd/init"], function(init) {
+define(["app-amd/constants", "app-amd/init", "app-amd/i18n!app-amd/nls/label"],
+	function(constants, init, label) {
 
-	init.doSomething();
+		console.log(constants.url);
+		console.log(label.greeting);
 
-	console.log("app loaded...");
+		init.doSomething();
 
-});
+		console.log("app loaded...");
+
+	});

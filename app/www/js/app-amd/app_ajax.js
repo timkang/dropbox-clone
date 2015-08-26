@@ -119,8 +119,8 @@ define(['jquery'], function() {
 	//});
 	//console.log("waiting...");
 
-	//request("/api/widgets").then(function() {
-	//	console.dir(arguments);
-	//});
+	myAjax("/api/widgets").then(function() {
+		console.dir(arguments);
+	});
 
 });

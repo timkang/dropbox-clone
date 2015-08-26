@@ -141,8 +141,23 @@ module.exports = function(grunt) {
 		var
 			http = require("http"),
 			express = require("express"),
+			multer = require("multer"),
 			app = express(),
 			webServerConfig = grunt.config("webServer");
+
+		app.use("/api", multer({
+			dest: "./app/uploads",
+			rename: function(fieldName, fileName) {
+				return fileName;
+			}
+		}));
+
+		app.use("/api/upload", function(req, res) {
+			//res.json({
+			//	message: "Upload Successful!"
+			//});
+			res.send("<?xml version=\"1.0\"?>\n<message>Uploaded!</message>");
+		});
 
 		app.use("/api/widgets", function(req, res) {
 

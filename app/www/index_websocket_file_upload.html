@@ -10,7 +10,8 @@
 	<body>
 
 		<form>
-			Select File: <input type="file" multiple id="uploadFile"> <button type="button">Upload</button>
+			Select File: <input type="file" multiple id="uploadFile">
+			<button type="button">Upload</button>
 		</form>
 
 		<script>
@@ -27,9 +28,6 @@
 				var uploadButton = document.getElementsByTagName("button")[0];
 
 				uploadButton.addEventListener("click", function(e) {
-
-						//ws.send("Test!");
-						//return;
 
 						uploadFile = document.getElementById("uploadFile");
 

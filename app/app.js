@@ -20,6 +20,14 @@ module.exports = function(config) {
 		config.mongoServer.port + "/" +
 		config.mongoServer.dbName);
 
+	/*
+	app.use("/css", function(req, res, next) {
+		setTimeout(function() {
+			next();
+		}, 5000);
+	});
+	*/
+
 	app.use("/css", express.static(contentFolders.cssFolder, {
 		setHeaders: function(res, filePath) {
 			res.setHeader("Content-Type", "text/css");
@@ -28,6 +36,14 @@ module.exports = function(config) {
 			}
 		}
 	}));
+
+	/*
+	app.use("/js", function(req, res, next) {
+		setTimeout(function() {
+			next();
+		}, 5000);
+	});
+	*/
 
 	app.use("/js", express.static(contentFolders.jsFolder, {
 		setHeaders: function(res, filePath) {
@@ -54,9 +70,13 @@ module.exports = function(config) {
 	app.use("/api", require("./routers/rest.js")("account"));
 
 	app.use("/", function(req, res) {
-		res.sendFile(config.httpServer.indexFile, function(err) {
-			if (err) res.status(err.status).end();
-		});
+		//console.log("request made");
+		//setTimeout(function() {
+		//	console.log("responding to request");
+			res.sendFile(config.httpServer.indexFile, function(err) {
+				if (err) res.status(err.status).end();
+			});
+		//}, 2000);
 	});
 
 	http.createServer(app).listen(config.httpServer.port, function() {

@@ -9,6 +9,8 @@ module.exports = function(grunt) {
 		cssFolder = path.join(wwwFolder, "css"),
 		jsFolder = path.join(wwwFolder, "js"),
 		libsFolder = path.join(wwwFolder, "libs"),
+		mediaFolder = path.join(wwwFolder, "libs"),
+		imagesFolder = path.join(wwwFolder, "libs"),
 		uploadsFolder = path.join("app", "uploads"),
 		indexFile = path.join(__dirname, wwwFolder, "index.html"),
 		cssMinFiles = {},
@@ -33,6 +35,8 @@ module.exports = function(grunt) {
 				cssFolder: cssFolder,
 				jsFolder: jsFolder,
 				libsFolder: libsFolder,
+				mediaFolder: mediaFolder,
+				imagesFolder: imagesFolder,
 				uploadsFolder: uploadsFolder
 			}
 		},
@@ -48,6 +52,58 @@ module.exports = function(grunt) {
         },
 				files: sassFiles
 			}
+		},
+    handlebars: {
+			compile: {
+				options: {
+					namespace: "handlebars",
+					amd: true,
+					processName: function(filePath) {
+						return path.basename(filePath, ".min.hbs");
+					},
+					processPartialName: function(filePath) {
+						return path.basename(filePath, ".min.hbs");
+					}
+				},
+				files: {
+					"app/www/js/app/app.templates.hbs.js": ["assets/templates-min/**/*.min.hbs"]
+				}
+			}
+		},
+		jst: {
+		  compile: {
+				options: {
+					namespace: "underscore",
+					amd: true
+				},
+		    files: {
+		      "app/www/js/app/app.templates.tpl.js": ["assets/templates-min/**/*.min.tpl"]
+		    }
+		  }
+		},
+		htmlmin: {
+			underscore: {
+	      options: {
+	        removeComments: true,
+	        collapseWhitespace: true
+	      },
+        expand: true,
+        cwd: 'assets/templates',
+        src: '*.tpl',
+        dest: 'assets/templates-min/',
+        ext: ".min.tpl"
+	    },
+			handlebars: {
+	      options: {
+	        removeComments: true,
+	        collapseWhitespace: true
+	      },
+        expand: true,
+        cwd: 'assets/templates',
+        src: '*.hbs',
+        dest: 'assets/templates-min/',
+        ext: ".min.hbs"
+	    }
 		},
 		cssmin: {
 			main: {
@@ -67,6 +123,20 @@ module.exports = function(grunt) {
       }
     },
 		watch: {
+			handlebars: {
+				files: ["assets/templates/**/*.hbs"],
+				tasks: ["htmlmin:handlebars", "handlebars"],
+				options: {
+					spawn: false
+				}
+			},
+			underscore: {
+				files: ["assets/templates/**/*.tpl"],
+				tasks: ["htmlmin:underscore", "jst"],
+				options: {
+					spawn: false
+				}
+			},
       css: {
 				files: path.join(sassFolder, "**", "*.scss"),
 				tasks: ["sass","cssmin","compress:css"]
@@ -75,7 +145,10 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-watch");
-  grunt.loadNpmTasks("grunt-contrib-sass");
+  grunt.loadNpmTasks("grunt-contrib-handlebars");
+  grunt.loadNpmTasks("grunt-contrib-jst");
+  grunt.loadNpmTasks("grunt-contrib-htmlmin");
+	grunt.loadNpmTasks("grunt-contrib-sass");
   grunt.loadNpmTasks("grunt-contrib-cssmin");
   grunt.loadNpmTasks("grunt-contrib-compress");
 
@@ -89,6 +162,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask("default", "start development environment",
-		[ "sass", "cssmin", "compress", "web-server", "watch" ]);
+		[ "htmlmin", "handlebars", "jst", "sass", "cssmin",
+		  "compress", "web-server", "watch" ]);
 
 };

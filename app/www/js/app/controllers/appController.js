@@ -1,6 +1,6 @@
-define(["underscore", "backbone", "app/models/account",
-				"app/views/editAccount", "app/views/viewAccount"],
-	function(_, Backbone, Account, EditAccount, ViewAccount) {
+define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
+				"app/views/editAccount", "app/views/viewAccount", "app/views/viewDrob"],
+	function(_, Backbone, Account, DrobFile, EditAccount, ViewAccount, ViewDrob) {
 
 		return function(router) {
 
@@ -18,6 +18,37 @@ define(["underscore", "backbone", "app/models/account",
 						cb(model);
 					}
 				});
+			}
+
+			this.uploadDrob = function (files) {
+				console.dir(files);
+				//add our collection here
+				var fd = new FormData();
+				for (var x=0; x<files.length; x++) {
+					fd.append("file-" + x, files[x]);
+				}
+
+				var xhr = new XMLHttpRequest();
+
+				xhr.addEventListener("readystatechange", function() {
+
+					if (xhr.readyState === 4 && xhr.status !== 200) {
+						console.log("error occurred");
+						console.dir(xhr);
+					}
+
+					if (xhr.readyState === 4 && xhr.status === 200) {
+						//console.log(JSON.parse(xhr.responseText));
+
+						var parser = new DOMParser();
+						console.log(parser.parseFromString(xhr.responseText, "application/xml"));
+					}
+
+				});
+
+				xhr.open("POST", "/api/upload");
+				xhr.send(fd);
+
 			}
 
 			controller.listenTo(router, "view-account", function(accountId) {
@@ -108,9 +139,34 @@ define(["underscore", "backbone", "app/models/account",
 					encodeURIComponent(model.id) + "/edit");
 			}
 
-			this.start = function() {
+			this.viewDrob = function(model) {
 
-				this.listAccounts();
+				if (currentView) {
+					currentView.remove();
+				}
+
+				currentView = new ViewDrob({
+					model: new DrobFile({})
+				});
+
+				controller.listenTo(currentView, "drob-file", function(files) {
+					controller.uploadDrob(files);
+					console.log("shhh");
+				});
+
+				console.log("print something out");
+
+				$("#app").append(currentView.render());
+
+				// router.navigate("/accounts/" +
+				// 	encodeURIComponent(model.id));
+			};
+
+
+			this.start = function() {
+				console.log("start");
+				//this.listAccounts();
+				this.viewDrob();
 
 			};
 

@@ -9,7 +9,8 @@
 			routes: {
 				"accounts": "listAccounts",
 				"accounts/(:id/)edit": "editAccount",
-				"accounts/:id": "viewAccount"
+				"accounts/:id": "viewAccount",
+				"drob": "drobFile"
 			},
 
 			listAccounts: function() {
@@ -27,6 +28,11 @@
 				} else {
 					this.trigger("create-account");
 				}
+			},
+
+			drobFile: function() {
+				console.log("drobfile");
+				this.trigger("drob-file");
 			}
 
 		});

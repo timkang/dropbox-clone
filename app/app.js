@@ -1,11 +1,16 @@
 module.exports = function(config) {
 
 	var
+		//logger = global.logger = require("./logger.js")(config.logger),
 		mongoose = require("mongoose"),
 		http = require("http"),
 		express = require("express"),
 		app = express(),
 		multer = require("multer"),
+		session = require('express-session'),
+		cookieParser = require('cookie-parser'),
+		passport = require("passport"),
+		crypto = require("crypto"),
 		bodyParser = require("body-parser"),
 		fs = require("fs"),
 		zlib = require("zlib"),
@@ -19,6 +24,33 @@ module.exports = function(config) {
 		config.mongoServer.host + ":" +
 		config.mongoServer.port + "/" +
 		config.mongoServer.dbName);
+
+	// serialize account id to session
+	//passport.serializeUser(function(account, done) {
+  //	done(null, account._id);
+	//});
+
+	// deserialize account from the database using is from session
+	//passport.deserializeUser(function(accountId, done) {
+	//	require("./models/account.js")
+	//		.findById(accountId, function(err, account) {
+	//			done(null, account.toObject());
+	//		});
+	//});
+
+	// handle cookies
+	//app.use(cookieParser());
+
+	// sessions are used for password ONLY
+	//app.use(session({
+	//	resave: false,
+	//	saveUninitialized: false,
+	//	secret : "asecret"
+	//}));
+
+	// setup passport for session based logins
+	//app.use(passport.initialize());
+	//app.use(passport.session());
 
 	/*
 	app.use("/css", function(req, res, next) {
@@ -57,6 +89,18 @@ module.exports = function(config) {
 	app.use("/libs", express.static(contentFolders.libsFolder));
 
 	app.use("/api", bodyParser.json());
+
+	// authenticate all API requests
+	//app.use(require("./routers/authenticate"));
+
+	// validate logged in and tokens for all API requests
+	//app.use(require("./routers/api-request-validator"));
+
+	// Custom Headers
+	//app.use("/api", function(req, res, next) {
+	//	res.set("X-Custom-Header", req.get("X-Custom-Header"));
+	//	next();
+	//});
 
 	app.use("/api", multer({ dest: contentFolders.uploadsFolder }).single("upload-file"));
 

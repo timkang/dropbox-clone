@@ -22,7 +22,7 @@ module.exports = function(fileName) {
 			});
 		});
 
-	router.route("/" + modelName)
+	router.route("/" + collectionName)
 		.post(function(req, res) {
 
 			var t = new DataModel(req.body);
@@ -35,7 +35,7 @@ module.exports = function(fileName) {
 			});
 		});
 
-	router.route("/" + modelName + "/:id")
+	router.route("/" + collectionName + "/:id")
 		.get(function(req, res) {
 			DataModel.findById(req.params.id,
 				function(err, result) {

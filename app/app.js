@@ -1,7 +1,7 @@
 module.exports = function(config) {
 
 	var
-		//logger = global.logger = require("./logger.js")(config.logger),
+		logger = global.logger = require("./logger.js")(config.logger),
 		mongoose = require("mongoose"),
 		http = require("http"),
 		express = require("express"),
@@ -97,10 +97,10 @@ module.exports = function(config) {
 	//app.use(require("./routers/api-request-validator"));
 
 	// Custom Headers
-	//app.use("/api", function(req, res, next) {
-	//	res.set("X-Custom-Header", req.get("X-Custom-Header"));
-	//	next();
-	//});
+	app.use("/api", function(req, res, next) {
+		res.set("X-Custom-Header", req.get("X-Custom-Header"));
+		next();
+	});
 
 	app.use("/api", multer({ dest: contentFolders.uploadsFolder }).single("upload-file"));
 
@@ -124,6 +124,7 @@ module.exports = function(config) {
 	});
 
 	http.createServer(app).listen(config.httpServer.port, function() {
-		console.log("web server running on port: " + config.httpServer.port);
+		logger.info("web server running on port: " + config.httpServer.port);
+		logger.error("the world has ended...");
 	});
 };

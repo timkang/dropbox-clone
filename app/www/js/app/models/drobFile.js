@@ -3,11 +3,11 @@ define(["backbone"], function(Backbone) {
 	return Backbone.Model.extend({
 
 		idAttribute: "_id",
-		urlRoot: "/api/accounts",
+		urlRoot: "/api/drobfiles",
 
     defaults: {
-			name: undefined,
-			sizeinBytes: undefined,
+			fileName: undefined,
+			sizeInBytes: undefined,
 			uploaded: undefined,
 			description: undefined
 		},

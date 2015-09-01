@@ -102,15 +102,16 @@ module.exports = function(config) {
 		next();
 	});
 
-	app.use("/api", multer({ dest: contentFolders.uploadsFolder }).single("upload-file"));
+	app.use("/api", multer({ dest: contentFolders.uploadsFolder }).single("file"));
 
 	app.use("/api/upload", function(req, res) {
+		console.log("api upload ");
 		res.json({
 			message: "upload successful!"
 		});
 	});
 
-	app.use("/api", require("./routers/rest.js")("user-file"));
+	app.use("/api", require("./routers/rest.js")("drobfile"));
 	app.use("/api", require("./routers/rest.js")("account"));
 
 	app.use("/", function(req, res) {

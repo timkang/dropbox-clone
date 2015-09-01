@@ -1,8 +1,8 @@
-define(["backbone", "app/models/drobFile"], function(Backbone, DrobFile) {
+define(["backbone", "app/models/drobfile"], function(Backbone, Drobfile) {
 
 	return Backbone.Collection.extend({
-		model: DrobFile,
-		url: "/api/drobFiles"
+		model: Drobfile,
+		url: "/api/drobfiles"
 	});
 
 });

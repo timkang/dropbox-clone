@@ -1,6 +1,7 @@
 define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
-				"app/views/editAccount", "app/views/viewAccount", "app/views/viewDrob"],
-	function(_, Backbone, Account, DrobFile, EditAccount, ViewAccount, ViewDrob) {
+				"app/views/editAccount", "app/views/viewAccount", "app/views/viewDrob",
+				 "app/models/drobfile", "app/collections/drobfiles"],
+	function(_, Backbone, Account, DrobFile, EditAccount, ViewAccount, ViewDrob, DrobFile, DrobCollection) {
 
 		return function(router) {
 
@@ -20,13 +21,23 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 				});
 			}
 
+			// function fetchDrob(cb) {
+			// 	var drobCollection = new DrobCollection();
+			// 	drobCollection.fetch({
+			// 		success: function(collection, response, options) {
+			// 		  console.dir("fetch drp collection: " + collection);
+			// 			cb(collection);
+			// 		}
+			// 	});
+			// }
+
 			this.uploadDrob = function (files) {
-				console.dir(files);
 				//add our collection here
 				var fd = new FormData();
-				for (var x=0; x<files.length; x++) {
-					fd.append("file-" + x, files[x]);
-				}
+				// for (var x=0; x<files.length; x++) {
+				// 	fd.append("file-" + x, files[x]);
+				// }
+				fd.append("file", files[0]);
 
 				var xhr = new XMLHttpRequest();
 
@@ -39,6 +50,26 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 
 					if (xhr.readyState === 4 && xhr.status === 200) {
 						//console.log(JSON.parse(xhr.responseText));
+
+						var drobfile = new DrobFile({
+							fileName: files[0].name,
+							sizeInBytes: files[0].size,
+							uploaded: new Date(),
+							description: "nothing yet"
+						});
+
+						drobfile.save(null, {
+							success: function(model, response, options){
+								console.dir(model);
+								console.log("success!");
+							},
+							error: function(model, response, options){
+								console.dir(model);
+								console.log("error!");
+							}
+						});
+
+
 
 						var parser = new DOMParser();
 						console.log(parser.parseFromString(xhr.responseText, "application/xml"));
@@ -58,6 +89,7 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 			controller.listenTo(router, "edit-account", function(accountId) {
 				fetchAccount(accountId, controller.editAccount);
 			});
+
 
 			this.listAccounts = function() {
 				console.log("list accounts");
@@ -141,20 +173,38 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 
 			this.viewDrob = function(model) {
 
+				console.dir("view drob model: " + model);
+
 				if (currentView) {
 					currentView.remove();
 				}
 
 				currentView = new ViewDrob({
-					model: new DrobFile({})
+					model: model
 				});
 
 				controller.listenTo(currentView, "drob-file", function(files) {
 					controller.uploadDrob(files);
-					console.log("shhh");
+					// fetchDrob(this.viewDrob);
 				});
 
 				console.log("print something out");
+
+				var ustin = "<table>";
+
+				for(var x = 0; x<model.length; x++){
+					console.dir(model.models[x]);
+					ustin = ustin + "<tr>";
+					ustin = ustin + "<td>" + model.models[x].attributes.fileName + "</td> ";
+					ustin = ustin + "<td>" + model.models[x].attributes.sizeInBytes + "</td> ";
+					ustin = ustin + "<td>" + model.models[x].attributes.uploaded + "</td> ";
+					ustin = ustin + "<td>" + model.models[x].attributes.description + "</td> ";
+					ustin = ustin + "</tr>";
+
+				}
+
+				ustin = ustin + "</table>";
+				$("div").append(ustin);
 
 				$("#app").append(currentView.render());
 
@@ -166,7 +216,12 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 			this.start = function() {
 				console.log("start");
 				//this.listAccounts();
-				this.viewDrob();
+				var drobfiles = new DrobCollection();
+				drobfiles.fetch({ success: function(collection) {
+					console.dir(collection);
+					controller.viewDrob(drobfiles);
+				}});
+
 
 			};
 

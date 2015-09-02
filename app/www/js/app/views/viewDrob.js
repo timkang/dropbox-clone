@@ -14,7 +14,13 @@
 
 			events: {
 				"drop [data-drobbable]": "drobData",
-				"dragover [data-drobbable]": "drobDragover"
+				"dragover [data-drobbable]": "drobDragover",
+				"click [delbuton]": "drobDelete"
+			},
+
+			drobDelete: function(e) {
+				console.log("drob deleted called");
+				this.trigger("delete-file", e.target);
 			},
 
 			drobData: function(e) {

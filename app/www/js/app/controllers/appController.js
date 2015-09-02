@@ -173,20 +173,25 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 			};
 
 			this.createRow = function(model){
+
+				var queryId = model.get('_id');
+
+				var deleteButton = $('button');
+
 				var mystring = "<tr>"
 				+ "<td>" + model.get('fileName') + "</td> "
 				+ "<td>" + model.get('sizeInBytes') + "</td> "
 				+ "<td>" + model.get('uploaded') + "</td> "
 				+ "<td>" + model.get('description') + "</td> "
-				+ "<td><button type='button' edibuton>edit</button>"
-				+ "<button type='button' delbuton>delete</button></td>"
+				+ "<td><button type='button' id=" + queryId + " edibuton>edit</button>"
+						+ "<button type='button' id=" + queryId + " delbuton>delete</button></td>"
 				+ "</tr>";
 				return mystring;
 			};
 
 			this.deleteFile = function(filename){
 				var fileclose = filename.closest("tr");
-				fileclose.innerHTML = "deleted";
+				fileclose.remove();
 				console.log(filename + " is getting deleted");
 			};
 

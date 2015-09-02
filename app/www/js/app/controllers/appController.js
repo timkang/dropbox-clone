@@ -21,15 +21,15 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 				});
 			}
 
-			// function fetchDrob(cb) {
-			// 	var drobCollection = new DrobCollection();
-			// 	drobCollection.fetch({
-			// 		success: function(collection, response, options) {
-			// 		  console.dir("fetch drp collection: " + collection);
-			// 			cb(collection);
-			// 		}
-			// 	});
-			// }
+			function fetchDrob(cb) {
+				var drobCollection = new DrobCollection();
+				drobCollection.fetch({
+					success: function(collection, response, options) {
+					  console.dir("fetch drp collection: " + collection);
+						cb(collection);
+					}
+				});
+			}
 
 			this.uploadDrob = function (files) {
 				//add our collection here
@@ -62,6 +62,7 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 							success: function(model, response, options){
 								console.dir(model);
 								console.log("success!");
+								$("#ericg").append(controller.createRow(model));
 							},
 							error: function(model, response, options){
 								console.dir(model);
@@ -169,7 +170,19 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 
 				router.navigate("/accounts/" +
 					encodeURIComponent(model.id) + "/edit");
-			}
+			};
+
+			this.createRow = function(model){
+				var mystring = "<tr>"
+				+ "<td>" + model.get('fileName') + "</td> "
+				+ "<td>" + model.get('sizeInBytes') + "</td> "
+				+ "<td>" + model.get('uploaded') + "</td> "
+				+ "<td>" + model.get('description') + "</td> "
+				+ "<td><button type='button' edibuton>edit</button>"
+				+ "<button type='button' delbuton>delete</button></td>"
+				+ "</tr>";
+				return mystring;
+			};
 
 			this.viewDrob = function(model) {
 
@@ -188,25 +201,16 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 					// fetchDrob(this.viewDrob);
 				});
 
-				console.log("print something out");
 
-				var ustin = "<table>";
+				var ustin = "";
 
-				for(var x = 0; x<model.length; x++){
-					console.dir(model.models[x]);
-					ustin = ustin + "<tr>";
-					ustin = ustin + "<td>" + model.models[x].attributes.fileName + "</td> ";
-					ustin = ustin + "<td>" + model.models[x].attributes.sizeInBytes + "</td> ";
-					ustin = ustin + "<td>" + model.models[x].attributes.uploaded + "</td> ";
-					ustin = ustin + "<td>" + model.models[x].attributes.description + "</td> ";
-					ustin = ustin + "</tr>";
-
-				}
-
-				ustin = ustin + "</table>";
-				$("div").append(ustin);
+				model.forEach(function(filemodel){
+					console.log(filemodel);
+					ustin += controller.createRow(filemodel);
+				});
 
 				$("#app").append(currentView.render());
+				$("#ericg").append(ustin);
 
 				// router.navigate("/accounts/" +
 				// 	encodeURIComponent(model.id));

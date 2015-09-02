@@ -1,6 +1,15 @@
 body [data-drobbable] {
   border: 2px dashed #999999;
   box-sizing: border-box;
-  width: 300px;
-  height: 300px;
-  background-color: #757575; }
+  width: 45%;
+  height: 500px;
+  background-color: #757575;
+  float: left;
+  margin-right: 5%;
+  font-size: 64px;
+  color: white; }
+body table {
+  float: right;
+  width: 50%; }
+  body table thead {
+    font-weight: bold; }

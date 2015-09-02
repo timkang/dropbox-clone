@@ -39,7 +39,7 @@ this["handlebars"]["viewAccount"] = Handlebars.template({"compiler":[6,">= 2.0.0
 },"useData":true});
 
 this["handlebars"]["viewDrob"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    return "<table id=\"ericg\"></table><div data-drobbable></div>";
+    return "<table id=\"ericg\"><thead><tr><td>Filename</td><td>Size in Bytes</td><td>Uploaded</td><td>Description</td><td>Edit Info</td></tr></thead></table><div data-drobbable>Drop your file here!</div>";
 },"useData":true});
 
 return this["handlebars"];

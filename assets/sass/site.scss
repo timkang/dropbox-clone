@@ -4,8 +4,21 @@ body {
 
 		border: 2px dashed #999999;
 		box-sizing: border-box;
-		width: 300px;
-		height: 300px;
+		width: 45%;
+		height: 500px;
 		background-color: #757575;
+		float: left;
+		margin-right: 5%;
+		font-size: 64px;
+		color: white;
+	}
+
+	table {
+		float: right;
+		width: 50%;
+
+		thead {
+			font-weight: bold;
+		}
 	}
 }

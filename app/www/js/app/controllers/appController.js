@@ -189,10 +189,27 @@ define(["underscore", "backbone", "app/models/account", "app/models/drobFile",
 				return mystring;
 			};
 
-			this.deleteFile = function(filename){
-				var fileclose = filename.closest("tr");
-				fileclose.remove();
-				console.log(filename + " is getting deleted");
+			this.deleteFile = function(buttonClicked){
+
+				var queryId = buttonClicked.id;
+				var fileclose = buttonClicked.closest("tr");
+
+				var file = new DrobFile({
+					_id: queryId
+				});
+
+				file.fetch({
+					success: function(model, response, options) {
+						file.destroy({
+							success: function(model, response, options) {
+								fileclose.remove();
+							}
+						});
+					}
+				});
+
+
+				console.log(buttonClicked.id + " is getting deleted");
 			};
 
 			this.viewDrob = function(model) {

@@ -15,12 +15,31 @@
 			events: {
 				"drop [data-drobbable]": "drobData",
 				"dragover [data-drobbable]": "drobDragover",
-				"click [delbuton]": "drobDelete"
+				"click [delbuton]": "drobDelete",
+				"click [edibuton]": "drobEdit",
+				"click [savbuton]": "drobSave",
+				"click [canbuton]": "drobCancel"
+
+			},
+
+			drobSave: function(e) {
+				console.log("drob save called");
+				this.trigger("save-file", e.target);
+			},
+
+			drobCancel: function(e) {
+				console.log("drob cancel called");
+				this.trigger("cancel-file", e.target);
 			},
 
 			drobDelete: function(e) {
 				console.log("drob deleted called");
 				this.trigger("delete-file", e.target);
+			},
+
+			drobEdit: function(e) {
+				console.log("drob edit called");
+				this.trigger("edit-file", e.target);
 			},
 
 			drobData: function(e) {

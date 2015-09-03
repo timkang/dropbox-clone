@@ -7,9 +7,14 @@ body [data-drobbable] {
   float: left;
   margin-right: 5%;
   font-size: 64px;
-  color: white; }
+  color: #999999;
+  text-align: center; }
+  body [data-drobbable]:hover {
+    color: #DDDDDD; }
 body table {
   float: right;
   width: 50%; }
   body table thead {
     font-weight: bold; }
+  body table .editsb {
+    display: none; }

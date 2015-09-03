@@ -10,7 +10,12 @@ body {
 		float: left;
 		margin-right: 5%;
 		font-size: 64px;
-		color: white;
+		color: #999999;
+		text-align: center;
+
+		&:hover {
+			color: #DDDDDD;
+		}
 	}
 
 	table {
@@ -20,5 +25,10 @@ body {
 		thead {
 			font-weight: bold;
 		}
+
+		.editsb {
+			display: none;
+		}
 	}
+
 }

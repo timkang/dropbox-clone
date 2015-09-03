@@ -25,40 +25,6 @@ module.exports = function(config) {
 		config.mongoServer.port + "/" +
 		config.mongoServer.dbName);
 
-	// serialize account id to session
-	//passport.serializeUser(function(account, done) {
-  //	done(null, account._id);
-	//});
-
-	// deserialize account from the database using is from session
-	//passport.deserializeUser(function(accountId, done) {
-	//	require("./models/account.js")
-	//		.findById(accountId, function(err, account) {
-	//			done(null, account.toObject());
-	//		});
-	//});
-
-	// handle cookies
-	//app.use(cookieParser());
-
-	// sessions are used for password ONLY
-	//app.use(session({
-	//	resave: false,
-	//	saveUninitialized: false,
-	//	secret : "asecret"
-	//}));
-
-	// setup passport for session based logins
-	//app.use(passport.initialize());
-	//app.use(passport.session());
-
-	/*
-	app.use("/css", function(req, res, next) {
-		setTimeout(function() {
-			next();
-		}, 5000);
-	});
-	*/
 
 	app.use("/css", express.static(contentFolders.cssFolder, {
 		setHeaders: function(res, filePath) {
@@ -69,13 +35,6 @@ module.exports = function(config) {
 		}
 	}));
 
-	/*
-	app.use("/js", function(req, res, next) {
-		setTimeout(function() {
-			next();
-		}, 5000);
-	});
-	*/
 
 	app.use("/js", express.static(contentFolders.jsFolder, {
 		setHeaders: function(res, filePath) {
@@ -106,8 +65,20 @@ module.exports = function(config) {
 
 	app.use("/api/upload", function(req, res) {
 		console.log("api upload ");
+		// console.dir(req.file);
 		res.json({
-			message: "upload successful!"
+			message: "upload successful!",
+			filename: req.file.filename
+		});
+	});
+
+	app.use("/api/delete", function(req,res){
+		console.log("delete called");
+		console.dir(req);
+		console.log(req);
+		// fs.unlink('/uploads/');
+		res.json({
+			message: "delet successfuled"
 		});
 	});
 

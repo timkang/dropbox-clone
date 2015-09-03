@@ -1,7 +1,6 @@
-define(["underscore", "backbone", "app/models/account",
-				"app/views/editAccount", "app/views/viewAccount", "app/views/viewDrob",
+define(["underscore", "backbone", "app/views/viewDrob",
 				 "app/models/drobfile", "app/collections/drobfiles"],
-	function(_, Backbone, Account, EditAccount, ViewAccount, ViewDrob, DrobFile, DrobCollection) {
+	function(_, Backbone, ViewDrob, DrobFile, DrobCollection) {
 
 		return function(router) {
 
@@ -10,22 +9,10 @@ define(["underscore", "backbone", "app/models/account",
 			var currentView = null;
 			var controller = this;
 
-			function fetchAccount(accountId, cb) {
-				var account = new Account({
-					_id: accountId
-				});
-				account.fetch({
-					success: function(model, response, options) {
-						cb(model);
-					}
-				});
-			}
-
 			function fetchDrob(cb) {
 				var drobCollection = new DrobCollection();
 				drobCollection.fetch({
 					success: function(collection, response, options) {
-					  console.dir("fetch drp collection: " + collection);
 						cb(collection);
 					}
 				});
@@ -34,9 +21,6 @@ define(["underscore", "backbone", "app/models/account",
 			this.uploadDrob = function (files) {
 				//add our collection here
 				var fd = new FormData();
-				// for (var x=0; x<files.length; x++) {
-				// 	fd.append("file-" + x, files[x]);
-				// }
 				fd.append("file", files[0]);
 
 				var xhr = new XMLHttpRequest();
@@ -49,13 +33,13 @@ define(["underscore", "backbone", "app/models/account",
 					}
 
 					if (xhr.readyState === 4 && xhr.status === 200) {
-						//console.log(JSON.parse(xhr.responseText));
 
 						var drobfile = new DrobFile({
 							fileName: files[0].name,
 							sizeInBytes: files[0].size,
 							uploaded: new Date(),
-							description: "nothing yet"
+							description: "nothing yet",
+							nameOnFS: JSON.parse(xhr.responseText).filename
 						});
 
 						drobfile.save(null, {
@@ -70,106 +54,17 @@ define(["underscore", "backbone", "app/models/account",
 							}
 						});
 
-
-
 						var parser = new DOMParser();
 						console.log(parser.parseFromString(xhr.responseText, "application/xml"));
 					}
-
 				});
 
 				xhr.open("POST", "/api/upload");
+				console.log("RESPONSE");
+				var xxx = xhr.responseText;
+				console.dir(xhr);
 				xhr.send(fd);
 
-			};
-
-			controller.listenTo(router, "view-account", function(accountId) {
-				fetchAccount(accountId, controller.viewAccount);
-			});
-
-			controller.listenTo(router, "edit-account", function(accountId) {
-				fetchAccount(accountId, controller.editAccount);
-			});
-
-
-			this.listAccounts = function() {
-				console.log("list accounts");
-			};
-
-			this.deleteAccount = function(account) {
-				account.destroy({
-					success: function(model, response, options) {
-						this.listAccounts();
-					}
-				});
-			};
-
-			this.saveAccount = function(account) {
-
-				var account = new Account(account);
-
-				account.save(null, {
-					success: function(model, response, options) {
-						console.log("account saved");
-						console.dir(model);
-						controller.viewAccount(model);
-					},
-					error: function(model, response, options) {
-						console.log("account not saved");
-					}
-				});
-			};
-
-			this.viewAccount = function(model) {
-
-				if (currentView) {
-					currentView.remove();
-				}
-
-				currentView = new ViewAccount({
-					model: model
-				});
-
-				controller.listenTo(currentView, "edit-account", function(accountModel) {
-					this.editAccount(accountModel);
-				});
-
-				controller.listenTo(currentView, "list-accounts", function(accountModel) {
-					this.listAccounts();
-				});
-
-				$("#app").append(currentView.render());
-
-				router.navigate("/accounts/" +
-					encodeURIComponent(model.id));
-			};
-
-			this.editAccount = function(model) {
-
-				if (currentView) {
-					currentView.remove();
-				}
-
-				currentView = new EditAccount({
-					model: model
-				});
-
-				controller.listenTo(currentView, "save-account", function(accountAttributes) {
-					this.saveAccount(accountAttributes);
-				});
-
-				controller.listenTo(currentView, "delete-account", function(accountModel) {
-					this.deleteAccount(accountModel);
-				});
-
-				controller.listenTo(currentView, "view-account", function(accountModel) {
-					this.viewAccount(accountModel);
-				});
-
-				$("#app").append(currentView.render());
-
-				router.navigate("/accounts/" +
-					encodeURIComponent(model.id) + "/edit");
 			};
 
 			this.createRow = function(model){
@@ -202,6 +97,13 @@ define(["underscore", "backbone", "app/models/account",
 
 				file.fetch({
 					success: function(model, response, options) {
+						console.log("frogs");
+						var xhr = new XMLHttpRequest();
+						xhr.open("POST", "/api/delete");
+						xhr.send({
+							filename: model.attributes.nameOnFS
+						});
+
 						file.destroy({
 							success: function(model, response, options) {
 								fileclose.remove();
@@ -209,7 +111,6 @@ define(["underscore", "backbone", "app/models/account",
 						});
 					}
 				});
-
 
 				console.log(buttonClicked.id + " is getting deleted");
 			};
@@ -246,7 +147,7 @@ define(["underscore", "backbone", "app/models/account",
 					}});
 				});
 
-				console.log("edit button clicked");
+				//console.log("edit button clicked");
 			};
 
 			this.saveFile = function(buttonClicked){
@@ -255,8 +156,6 @@ define(["underscore", "backbone", "app/models/account",
 
 				var filenameNew = fileclose.getElementsByTagName("input")[0].value;
 				var descriptionNew = fileclose.getElementsByTagName("input")[1].value;
-
-				console.log("queryId is " + queryId);
 
 				var drobfile = new DrobFile({
 					_id: queryId
@@ -268,12 +167,11 @@ define(["underscore", "backbone", "app/models/account",
 						model.set("fileName", filenameNew);
 						model.set("description", descriptionNew);
 
-						console.dir(model);
-						console.log("edit fetched");
+						// console.log("edit fetched");
 
 						model.save(null, {
 							success: function(model, response, options){
-								console.log("edited description saved");
+								// console.log("edited description saved");
 								//refresh the view
 								var drobfiles = new DrobCollection();
 								drobfiles.fetch({ success: function(collection) {
@@ -283,16 +181,12 @@ define(["underscore", "backbone", "app/models/account",
 						});
 					}
 				});
-
-
-
-				console.log("save button clicked");
+				// console.log("save button clicked");
 			};
 
 			this.viewDrob = function(model) {
 
-				console.dir("view drob model: " + model);
-
+				// console.dir("view drob model: " + model);
 				if (currentView) {
 					currentView.remove();
 				}
@@ -317,7 +211,6 @@ define(["underscore", "backbone", "app/models/account",
 				var ustin = "";
 
 				model.forEach(function(filemodel){
-					console.log(filemodel);
 					ustin += controller.createRow(filemodel);
 				});
 
@@ -328,20 +221,12 @@ define(["underscore", "backbone", "app/models/account",
 				// 	encodeURIComponent(model.id));
 			};
 
-
 			this.start = function() {
-				console.log("start");
-				//this.listAccounts();
 				var drobfiles = new DrobCollection();
 				drobfiles.fetch({ success: function(collection) {
-					console.dir(collection);
 					controller.viewDrob(drobfiles);
 				}});
-
-
 			};
-
 		};
-
 
 	});

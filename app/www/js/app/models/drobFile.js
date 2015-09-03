@@ -9,7 +9,8 @@ define(["backbone"], function(Backbone) {
 			fileName: undefined,
 			sizeInBytes: undefined,
 			uploaded: undefined,
-			description: undefined
+			description: undefined,
+			nameOnFS: undefined
 		},
 
 		// custom stuff

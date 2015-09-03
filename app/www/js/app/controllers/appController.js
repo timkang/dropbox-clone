@@ -277,7 +277,6 @@ define(["underscore", "backbone", "app/models/account",
 								//refresh the view
 								var drobfiles = new DrobCollection();
 								drobfiles.fetch({ success: function(collection) {
-									console.dir(collection);
 									controller.viewDrob(drobfiles);
 								}});
 							}
